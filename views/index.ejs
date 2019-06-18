@@ -4,10 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="css/basic.css" />
     <title>Document</title>
   </head>
   <body>
-    <%include public/header.ejs%> <%-content%> 这是ejs模板引擎 <%=title%> <%if(num>100){%> 大于100 <%}else{%> 小于100
-    <%}%> <%=userInfo%>
+    <form action="/doAdd" method="post">
+      用户名：<input type="text" name="username" />
+      <br />
+      <br />
+      密 码：<input type="password" name="password" />
+      <br />
+      <br />
+      <input type="submit" value="提交" />
+    </form>
   </body>
 </html>

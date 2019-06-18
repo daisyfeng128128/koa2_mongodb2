@@ -3,8 +3,9 @@ const router = require('koa-router')();
 const static = require('koa-static');
 const views = require('koa-views');
 const path = require('path');
+const staticPath = '/static';
 const app = new Koa();
-const bodyParser = require('koa-bodyparser');
+const common = require('./module/common.js');
 
 // app.use(
 //   views('views', {
@@ -18,10 +19,6 @@ app.use(
   })
 ); //这种方式配置，模板文件要以.ejs结尾
 
-// koa中koa-bodyparser中间件获取表单提交的数据
-app.use(bodyParser());
-
-app.use(static(__dirname + '/static'));
 app.use(async (ctx, next) => {
   ctx.state.userInfo = 'amy';
   // 应用级中间件
@@ -44,9 +41,10 @@ router.get('/', async ctx => {
 
 // 接收post提交的数据
 router.post('/doAdd', async ctx => {
-  // 远程nodejs子在koa中获取表单提交的数据
-  debugger;
-  ctx.body = ctx.request.body;
+  // 原生nodejs子在koa中获取表单提交的数据
+  let data = await common.getPostData(ctx);
+  console.log(data);
+  ctx.body = data;
 });
 
 router.get('/news', async ctx => {
@@ -84,6 +82,8 @@ router.get('/add', async ctx => {
 app.use(router.routes()); //作用：启动路由
 app.use(router.allowedMethods()); //作用：官方推荐用法，router.allowedMethods()用在了路由匹配router.routers()之后，所有在当所有路由中间件最后掉用，此时根据stx.status设置response响应头
 
+const bodyParser = require('koa-bodyparser');
+app.use(bodyParser());
 app.listen(4000, () => {
   console.log('start at port 4000');
 });
